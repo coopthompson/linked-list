@@ -27,6 +27,13 @@ class LinkedList {
         appendNode(this, value)
     }
 
+    pop() {
+        if (this.hasOwnProperty('next')) {
+            return removeNode(this)
+        }
+        this.head = null   
+    }
+
     at(index) {
         return toIndex(this, index)
     }
@@ -36,7 +43,16 @@ class LinkedList {
     }
 
     find(value) {
-        return recIndexValue(this, value)
+        if (this.contains(value) === true) {
+            return (runThrough(this) - 1)
+        } else if (this.contains(value) === false) {
+            return "Value not found"
+        }
+    }
+
+    toString() {
+       return grabValues(this);
+
     }
 }
 
@@ -58,6 +74,14 @@ function appendNode(obj, value) {
         curNode = obj
     }
 
+    if(obj.hasOwnProperty('next') === false) {
+        const listNode = new Node;
+        listNode.setValue(value);
+        listNode.setNextNode(null);
+        obj.head = listNode;
+        return listNode;
+    }
+
     if (Object.values(curNode).indexOf(null) > -1) {
         const listNode = new Node;
         listNode.setValue(value);
@@ -75,8 +99,11 @@ function runThrough(obj, count = 1) {
         curNode = obj
     }
 
+    if (curNode.next === undefined) {
+        return count;
+    }
+
     if (Object.values(curNode).indexOf(null) > -1) {
-        console.log(count)
         return count;     
     }
     count++;
@@ -126,30 +153,54 @@ function recValue(obj, value) {
     return recValue(curNode.next, value)
 }
 
-function recIndexValue(obj, value) {
+function grabValues(obj, array = []) {
     if (obj.head !== undefined) {
         curNode = obj.head
     } else {
         curNode = obj
     }
 
-    if (Object.values(curNode).indexOf(value) > -1) {
-        return true;     
-    } else if (Object.values(curNode).indexOf(null) > -1) {
-        return false;
+    if(Object.values(curNode).indexOf(curNode.value) > -1) {
+        let target = curNode.value
+        array.push(target);
     }
-    
-    return recIndexValue(curNode.next, value)
+
+    if (Object.values(curNode).indexOf(null) > -1) {
+        let string = array.toString();
+        console.log(string)
+        return string;
+    }
+
+    return grabValues(curNode.next, array)
+}
+
+function removeNode(obj) {
+    if (obj.head !== undefined) {
+        curNode = obj.head
+    } else {
+        curNode = obj
+    }
+
+    if (curNode.next.next === null) {
+        curNode.next = null
+        return;
+    }
+    return removeNode(curNode.next)
+}
+
+function checkIfZero(obj, value) {
+    if(obj.hasOwnProperty('next') === false) {
+        const listNode = new Node;
+        listNode.setValue(value);
+        listNode.setNextNode(null);
+        obj.next = listNode;
+        return listNode;
+    }
 }
 
 const newList1 = new LinkedList;
 
-newList1.prepend(4)
-newList1.prepend(5)
-newList1.append(3)
-newList1.append(2)
-console.log(newList1.contains(9))
-
+console.log(newList1)
 
 
 
