@@ -66,20 +66,27 @@ class Node {
     }
 }
 
-
 function appendNode(obj, value) {
-    if (obj.head !== undefined) {
-        curNode = obj.head
-    } else {
-        curNode = obj
-    }
-
-    if(obj.hasOwnProperty('next') === false) {
+    if(obj.head === null) {
         const listNode = new Node;
         listNode.setValue(value);
         listNode.setNextNode(null);
         obj.head = listNode;
         return listNode;
+    }
+
+    if (obj.hasOwnProperty('head') && obj.head.next === null) {
+        const listNode = new Node;
+        listNode.setValue(value);
+        listNode.setNextNode(null);
+        obj.head.next = listNode;
+        return listNode;
+    }
+
+    if (obj.head !== undefined) {
+        curNode = obj.head
+    } else {
+        curNode = obj
     }
 
     if (Object.values(curNode).indexOf(null) > -1) {
@@ -93,14 +100,14 @@ function appendNode(obj, value) {
 }
 
 function runThrough(obj, count = 1) {
+    if (obj.hasOwnProperty('head') && obj.head === null) {
+        return count - 1;
+    }
+
     if (obj.head !== undefined) {
         curNode = obj.head
     } else {
         curNode = obj
-    }
-
-    if (curNode.next === undefined) {
-        return count;
     }
 
     if (Object.values(curNode).indexOf(null) > -1) {
@@ -109,8 +116,12 @@ function runThrough(obj, count = 1) {
     count++;
     return runThrough(curNode.next, count)
 }
-    
+   
 function findLast(obj) {
+    if (obj.hasOwnProperty('head') && obj.head === null) {
+        return obj;
+    }
+
     if (obj.head !== undefined) {
         curNode = obj.head
     } else {
@@ -124,10 +135,18 @@ function findLast(obj) {
 }
 
 function toIndex(obj, index, curIndex = 0) {
+    if (obj.hasOwnProperty('head') && obj.head === null) {
+        return 'No node found';
+    }
+
     if (obj.head !== undefined) {
         curNode = obj.head
     } else {
         curNode = obj
+    }
+
+    if (Object.values(curNode).indexOf(null) > -1 && curIndex !== index) {
+        return "No node found";     
     }
 
     if (curIndex === index) {
@@ -136,7 +155,7 @@ function toIndex(obj, index, curIndex = 0) {
     curIndex++
     return toIndex(curNode.next, index, curIndex)
 }
-
+//working
 function recValue(obj, value) {
     if (obj.head !== undefined) {
         curNode = obj.head
@@ -200,8 +219,5 @@ function checkIfZero(obj, value) {
 
 const newList1 = new LinkedList;
 
-console.log(newList1)
-
-
-
-
+newList1.append("30 billion")
+console.log(newList1.at(0))
