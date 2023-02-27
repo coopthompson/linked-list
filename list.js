@@ -41,13 +41,9 @@ class LinkedList {
     contains(value) {
         return recValue(this, value)
     }
-
+    //working
     find(value) {
-        if (this.contains(value) === true) {
-            return (runThrough(this) - 1)
-        } else if (this.contains(value) === false) {
-            return "Value not found"
-        }
+        return findIndex(this, value)
     }
 
     toString() {
@@ -155,8 +151,12 @@ function toIndex(obj, index, curIndex = 0) {
     curIndex++
     return toIndex(curNode.next, index, curIndex)
 }
-//working
+
 function recValue(obj, value) {
+    if (obj.hasOwnProperty('head') && obj.head === null) {
+        return false;
+    }
+
     if (obj.head !== undefined) {
         curNode = obj.head
     } else {
@@ -173,6 +173,10 @@ function recValue(obj, value) {
 }
 
 function grabValues(obj, array = []) {
+    if (obj.hasOwnProperty('head') && obj.head === null) {
+        return 'empty list, add values';
+    }
+
     if (obj.head !== undefined) {
         curNode = obj.head
     } else {
@@ -207,17 +211,32 @@ function removeNode(obj) {
     return removeNode(curNode.next)
 }
 
-function checkIfZero(obj, value) {
-    if(obj.hasOwnProperty('next') === false) {
-        const listNode = new Node;
-        listNode.setValue(value);
-        listNode.setNextNode(null);
-        obj.next = listNode;
-        return listNode;
+function findIndex(obj, value, index = 0) {
+    if (obj.hasOwnProperty('head') && obj.head === null) {
+        return 'Value not found';
     }
+
+    if (obj.head !== undefined) {
+        curNode = obj.head
+    } else {
+        curNode = obj
+    }
+
+    if (curNode.value === value) {
+        return index
+    }
+
+    if (Object.values(curNode).indexOf(null) > -1) {
+        return 'Value not found';     
+    }
+
+    index++;
+    return findIndex(curNode.next, value, index)
 }
+
 
 const newList1 = new LinkedList;
 
-newList1.append("30 billion")
-console.log(newList1.at(0))
+
+
+
